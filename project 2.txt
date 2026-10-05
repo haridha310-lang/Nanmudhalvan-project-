@@ -1,0 +1,57 @@
+from google import genai
+import os
+
+# Gemini API Key
+API_KEY = os.getenv("GEMINI_API_KEY")
+
+client = genai.Client(api_key=API_KEY)
+
+
+def create_comic(topic):
+    prompt = f"""
+    You are an AI comic creator.
+
+    Create a short comic story about:
+    {topic}
+
+    Generate 5 comic panels.
+
+    For each panel give:
+    1. Panel description
+    2. Character names
+    3. Dialogue
+    4. Scene/background
+
+    Keep the story simple, creative and fun.
+    """
+
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=prompt
+    )
+
+    return response.text
+
+
+def main():
+    print("===================================")
+    print("       COMIC CRAFT")
+    print("   AI Comic Creator using Gemini")
+    print("===================================")
+
+    topic = input("\nEnter your comic topic: ")
+
+    if topic.strip() == "":
+        print("Please enter a topic.")
+        return
+
+    print("\nCreating your comic...\n")
+
+    comic = create_comic(topic)
+
+    print("========== YOUR COMIC ==========\n")
+    print(comic)
+
+
+if __name__ == "__main__":
+    main()
